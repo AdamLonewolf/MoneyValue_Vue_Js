@@ -3,7 +3,7 @@ export default {
     data() {
         return{
             //Ce objet est un tableau qui va stocker les infos envoyés par l'api
-            pairs:[],
+            currency:[],
             page:1,
             totalPage: ""
         }
@@ -16,29 +16,27 @@ export default {
     },
     methods:{
         async getData(){
-            var link = `${this.url}pairs/list/${this.page}`;
-            this.pairs = await(await(fetch(link, {
+            var link = `${this.url}currencies/list/${this.page}`;
+            this.currency = await(await(fetch(link, {
                 method:"get"
             }))).json(); //on envoie directement les informations dans l'objet pairs
-            this.totalPage = this.pairs.totalPage;
-            console.log(this.pairs);
+            this.totalPage = this.currency.totalPage;
+            console.log(this.currency);
         },
 
         //Fonction pour supprimer une paire 
 
         async deletePair(id){
-            var deletelink = `${this.url}pairs/delete/${id}`
+            var deletelink = `${this.url}currency/delete/${id}`
             var res = await(await(fetch(deletelink,{
                 method: "delete"
             }))).json();
             if(res.status == "OK"){
-                this.pairs.data = this.pairs.data.filter((pair)=>pair.id != id) //Si tout se passe bien, on filtre la liste des paire et on met de côté tous ceux qui n'ont pas l'id selectionné.
+                this.currency.data = this.currency.data.filter((currency)=>currency.id != id) //Si tout se passe bien, on filtre la liste des paire et on met de côté tous ceux qui n'ont pas l'id selectionné.
                 console.log(res);
             }
         },
-
     
-        
     },
 
     //Une fois la page montée, on appelle directement la fonction getData()
@@ -52,7 +50,7 @@ export default {
 <template>
 
     <div class="btn-add-container d-flex justify-content-end align-items-center">
-        <router-link :to="`/form`" class="custom-link">
+        <router-link :to="`/currencyform/`" class="custom-link">
             <button class="add-btn">
                 <i class="fa-solid fa-plus mx-2"></i>
                 Ajouter une nouvelle paire
@@ -63,28 +61,24 @@ export default {
     <thead class="table-dark">
         <tr>
             <th scope="col">id</th>
-            <th scope="col">Monnaie Source</th>
-            <th scope="col">Monnaie Cible</th>
-            <th scope="col">Taux de conversion</th>
-            <th scope="col">Nombre de requêtes</th>
+            <th scope="col">Code de la monnaie</th>
+            <th scope="col">Nom de la monnaie</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
-        <tr v-for="pair in pairs.data" :key="pair.id">
-            <th scope="row">{{pair.id}}</th>
-            <td :id="pair.from_currency_id" class="pairs">{{pair.from_currency_code}}</td>
-            <td :id="pair.to_currency_id" class="pairs">{{pair.to_currency_code}}</td>
-            <td class="rate">{{pair.convert_rate.toFixed(2)}}</td>
-            <td class="requests">{{pair.requests}}</td>
+        <tr v-for="currency in currency.data" :key="currency.id">
+            <th scope="row">{{currency.id}}</th>
+            <td :id="currency.id" class="pairs">{{currency.currency_code}}</td>
+            <td :id="currency.id" class="pairs">{{currency.currency_name}}</td>
             <td>
               <div class="action-btn d-flex align-items-center">
-                 <router-link :to="`/form/${pair.id}`">
+                 <router-link :to="`/currencyform/${currency.id}`">
                     <button class="action edit-btn">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
                 </router-link>
-                 <button class="action delete-btn" @click="deletePair(pair.id)">
+                 <button class="action delete-btn" @click="deletePair(currency.id)">
                     <i class="fa-solid fa-trash-can"></i>
                  </button>
               </div>

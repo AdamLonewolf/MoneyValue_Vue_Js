@@ -1,5 +1,5 @@
 <script>
-import PairList from '../../components/PairList.vue'
+import CurrencyList from '../../components/CurrencyList.vue'
 export default {
     data() {
         return{
@@ -8,10 +8,9 @@ export default {
         }
     },
 
-   components:{
-        PairList
+  components:{
+        CurrencyList
     },
-
   methods:{
     //Fonction pour se déconnecter 
 
@@ -43,7 +42,7 @@ export default {
    <nav id="my-navbar" class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <div class="logo-brand">
-        <img src="src/assets/images/coin-2.png" alt="coin">
+        <img src="/images/coin-2.png" alt="coin">
         <p class="logo-marque">Money Value</p>
       </div>
        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,10 +51,10 @@ export default {
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-ul navbar-nav me-auto mx-5">
           <li class="nav-item">
-             <router-link :to="`/dashboard`"><a class="nav-link">Paires</a></router-link>
+             <router-link :to="`/dashboard`" class="custom-link"><a class="nav-link">Paires</a></router-link>
           </li>
           <li class="nav-item">
-            <router-link :to="`/dashboard/currency`"><a class="nav-link">Devises</a></router-link>
+            <router-link :to="`/dashboard/currency`" class="custom-link"><a class="nav-link">Devises</a></router-link>
           </li>
         </ul>
         <div class="btn-logout-container">
@@ -70,25 +69,24 @@ export default {
 
   <!-- Banner -->
 
-     <div class="bg-dark banner d-flex justify-content-center align-items-center" style="height: 350px !important; background-image:url(src/assets/images/banner.jpg); background-position:center center; background-repeat:no-repeat; background-size:cover; position: relative;">
+     <div class="bg-dark banner d-flex justify-content-center align-items-center" style="height: 350px !important; background-image:url(/images/banner2.jpg); background-position:center center; background-repeat:no-repeat; background-size:cover; position: relative;">
         <div class="overlay" style="width:100%; height:100%; background-color:#181818; position:absolute; opacity:0.4; z-index:1000"></div>
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder" style="z-index: 1000; position:relative">Liste des paires</h1>
+                <h1 class="display-4 fw-bolder" style="z-index: 1000; position:relative">Liste des Devises</h1>
             </div>
         </div>
     </div>
 
   <div class="container-fluid">
-      <PairList></PairList>
+     <CurrencyList></CurrencyList>
   </div>
-
+  
   <footer>
       <div class="container-fluid container-footer">
         <p>© MoneyValue - 2023</p>      
       </div>  
     </footer>
-  
 </template>
 
 <style src="">
@@ -101,6 +99,34 @@ body{
     box-sizing: border-box;
     background: #F6F1E9;
     height: 100vh;
+}
+
+#my-navbar{
+    background-color: var(--tertiairy-color);
+}
+
+#my-navbar .logo-brand{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#my-navbar .logo-brand img{
+    width: 30px;
+    height: auto;
+}
+
+#my-navbar .logo-brand a{
+  text-decoration: none;
+}
+
+#my-navbar .logo-marque{
+    margin-bottom: 0px;
+    margin-left: 6px;
+    color: var(--text-white);
+    font-family: var(--bold);
+    font-size: 25px;
+    margin-top: 0px !;
 }
 
 footer {
@@ -132,35 +158,6 @@ footer {
         footer .social-media i{
             font-size: 25px;
         }
-
-#my-navbar{
-    background-color: var(--tertiairy-color);
-}
-
-#my-navbar .logo-brand{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#my-navbar .logo-brand img{
-    width: 30px;
-    height: auto;
-}
-
-#my-navbar .logo-brand a{
-  text-decoration: none;
-}
-
-#my-navbar .logo-marque{
-    margin-bottom: 0px;
-    margin-left: 6px;
-    color: var(--text-white);
-    font-family: var(--bold);
-    font-size: 25px;
-}
-
-
 
 
 .navbar-collapse{
@@ -195,5 +192,9 @@ footer {
   .btn-logout:hover {
     background-color: var(--danger-color);
     color: #fff;
+  }
+
+  a{
+    text-decoration: none;
   }
 </style>

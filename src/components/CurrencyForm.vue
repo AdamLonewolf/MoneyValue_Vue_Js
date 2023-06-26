@@ -4,35 +4,34 @@ export default {
         return{ 
           currencies: [],
           //On récupère la valeur de ces 3 champs via ces éléments
-          fromCurrency:"", 
-          toCurrency:"",
-          convertRate:""
+          currencyCode:"",
+          currencyName:""
         }
     },
     props:['id'],
     methods:{
-        async getcurrencies(){
+        async getCurrencies(){
             var link = `${this.url}currencies/list`;
              this.currencies = await(await(fetch(link, {
                 method:"get"
-            }))).json(); //on récupère la liste des devises
+            }))).json(); //on envoie directement les informations dans l'objet pairs
         },
 
     //On renvoie toutes les informations de la paire sélectionnée
 
         async getData(id){
-           let res = await(await fetch(`${this.url}pair/${id}`)).json();
-           this.fromCurrency = res.data.from_currency_id;
-           this.toCurrency = res.data.to_currency_id;
-           this.convertRate = res.data.convert_rate;
+           let res = await(await fetch(`${this.url}currencies/${id}`)).json();
+           this.currencyCode = res.data.currency_code;
+           this.currencyName = res.data.currency_name;
+      
         },
 
         async submit(id){
             //Si id est égale à 0, ça veut dire qu'il s'agit de la création d'une paire, dans le cas contraire, il s'agit de la modification d'une paire existante.
             if(id == 0){
-                var link = `${this.url}pairs/create`;
+                var link = `${this.url}currency/create`;
             } else {
-                link = `${this.url}pairs/edit/${id}`;
+                link = `${this.url}currency/edit/${id}`;
             }
 
             var res = await(await(fetch(link, {
@@ -42,17 +41,17 @@ export default {
                     },
                     body: JSON.stringify({
                         //On renseigne les valeurs de chaque élément
-                       'from_currency_id' : this.fromCurrency,
-                       'to_currency_id': this.toCurrency,
-                       'convert_rate': this.convertRate
+                       'currency_code' : this.currencyCode,
+                       'currency_name': this.currencyName,
+                    
                     })
             }))).json()
 
              if(res.status == "OK"){
-                    this.$router.push('/dashboard') //si c'est bon, on renvoie l'admin sur le dashboard
-                    alert(res.message); //on affiche un message de succès
+                    this.$router.push('/dashboard/currency') //si c'est bon, on renvoie l'admin sur le dashboard
+                    alert(res.message)
                 } else {
-                    alert(res.message); //sinon on affiche un message d'erreur
+                    alert(res.message)
                 }
         }
 
@@ -61,7 +60,7 @@ export default {
     
 
     mounted:function(){
-    this.getcurrencies();
+    this.getCurrencies();
 
     //Si on reçoit la valeur de l'id, on appelle cette propriété une fois la page chargée.
      if(this.id){
@@ -77,29 +76,19 @@ export default {
     <form class="pair-container" @submit.prevent="submit(this.id)"  action="">
     
         <div class="indication" >
-            <h1 v-if="id == 0">Créer une nouvelle paire</h1>
-            <h1 v-else>Modification d'une paire</h1>
+            <h1 v-if="id == 0">Créer une nouvelle devise</h1>
+            <h1 v-else>Modification d'une devise</h1>
             <h4>Veuillez renseigner les champs ci-dessous</h4>
         </div>
         <div class="group-form group-form-1">
-            <label for="from_currency">Monnaie Source</label>
-            <select class="form-select my-1" v-model="fromCurrency"> 
-               <option v-for="currency in currencies.data" :key="currency.id" :value="currency.id">{{ currency.currency_code }}
-                 </option>
-            </select>
+            <label for="from_currency">Code de la devise</label>
+            <input type="text" id="currency_code" v-model="currencyCode" name="currency_code" placeholder="le code de la devise...">
         </div>
         <div class="group-form group-form-2">
-            <label for="from_currency">Monnaie Cible</label>
-            <select class="form-select my-1" v-model="toCurrency">
-                 <option v-for="currency in currencies.data" :key="currency.id" :value="currency.id">{{ currency.currency_code }}
-                 </option>
-            </select>
+            <label for="from_currency">Nom de la devise</label>
+           <input type="text" id="currency_name" v-model="currencyName" name="currency_name" placeholder="le nom de la devise...">
         </div>
-        <div class="group-form group-form-3">
-            <label for="from_currency">Taux de conversion</label>
-              <input type="number" id="convert_rate" v-model="convertRate" name="convert_rate" placeholder="taux de conversion.." step="any">
-        </div>
-         <button type="submit" class="btn-edit mt-5" v-if="id == 0">Créer une paire</button>
+         <button type="submit" class="btn-edit mt-5" v-if="id == 0">Créer une devise</button>
         <button type="submit" class="btn-edit mt-5" v-else>Sauvegarder</button>
     </form>
 </template>
