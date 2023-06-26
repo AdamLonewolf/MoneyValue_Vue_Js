@@ -20,9 +20,9 @@ const router = createRouter({
       component: () => import('../views/Admin/Dashboard.vue') //Route qui va nous diriger vers le dashboard.
     },
     {
-      path: '/edit/:id?',
+      path: '/form/:id?',
       name: 'admin.edit',
-      component: () => import('../components/EditPair.vue'), //Route qui va nous diriger vers le formulaire d'édition.
+      component: () => import('../components/PairForm.vue'), //Route qui va nous diriger vers le formulaire d'édition.
       props:true
     },
     {

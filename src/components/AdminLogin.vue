@@ -1,4 +1,5 @@
 <script>
+
 export default {
     data(){
         return{ 
@@ -7,7 +8,7 @@ export default {
             email: ""
         }
     },
-
+    
     methods: {
         //On fait une méthode qui va envoyer les données du formulaire quand on clique sur le bouton de validation
 
@@ -31,10 +32,11 @@ export default {
 
             console.log(res);
 
-            //Si tout se passe bien, on stocke le token de l'admin dans la session du navigateur et on le dirige vers son dashboard
+            //Si tout se passe bien, on stocke le token de l'admin ainsi que son id dans la session du navigateur et on le dirige vers son dashboard
 
             if(res.status == "OK"){
                 sessionStorage.setItem("User_token",res.token);
+                sessionStorage.setItem("User_id",res.user.id); 
                 this.$router.push('/dashboard');
             } else {
                 alert('Une erreur est survenue.');

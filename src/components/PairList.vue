@@ -27,7 +27,9 @@ export default {
                 this.pairs.data = this.pairs.data.filter((pair)=>pair.id != id) //Si tout se passe bien, on filtre la liste des paire et on met de côté tous ceux qui n'ont pas l'id selectionné.
                 console.log(res);
             }
-        }
+        },
+
+        
     },
 
     //Une fois la page montée, on appelle directement la fonction getData()
@@ -41,14 +43,14 @@ export default {
 <template>
 
     <div class="btn-add-container d-flex justify-content-end align-items-center">
-        <router-link :to="`/edit`">
+        <router-link :to="`/form`" class="custom-link">
             <button class="add-btn">
                 <i class="fa-solid fa-plus mx-2"></i>
                 Ajouter une nouvelle paire
             </button>
         </router-link>
     </div>
-    <table id="table" class="table">
+    <table id="table" class="table table-striped table-responsive">
     <thead class="table-dark">
         <tr>
             <th scope="col">id</th>
@@ -68,7 +70,7 @@ export default {
             <td class="requests">{{pair.requests}}</td>
             <td>
               <div class="action-btn d-flex align-items-center">
-                 <router-link :to="`/edit/${pair.id}`">
+                 <router-link :to="`/form/${pair.id}`">
                     <button class="action edit-btn">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
@@ -104,6 +106,10 @@ export default {
         background: var(--secondary-color);
         color: var(--text-white);
         margin-right: 15px;
+    }
+
+    a{
+    text-decoration: none;
     }
 
     .add-btn{

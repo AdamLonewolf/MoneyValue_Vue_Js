@@ -1,15 +1,39 @@
 <script>
-import List from '../components/PairList.vue';
+import PairList from '../../components/PairList.vue'
 export default {
     data() {
         return{
-
+          //Je récupère le token de l'utilsateur stocké dans la session du navigateur.
+         user_id: sessionStorage.getItem('User_id'), //On récupère l'id de l'admin
         }
     },
 
-    components:{
-      List
-    }
+   components:{
+        PairList
+    },
+
+  methods:{
+    //Fonction pour se déconnecter 
+
+      async logout(){
+       //Je stocke l'id dans une variable
+       var id = this.user_id;
+       var link = `${this.url}users/logout/${id}`
+        
+       var res = await(await(fetch(link,{
+        method:"get",
+       }))).json(); 
+
+       if(res.status == "OK"){
+        //Si la déconnexion est effectuée avec succès, on écrase les token et l'id de l'admin dans la session du navigateur
+          sessionStorage.removeItem('User_id');
+          sessionStorage.removeItem('User_token');
+          this.$router.push('/'); //Si c'est bon, on dirige l'admin sur la page d'accueil
+       }  
+      }
+
+  }
+  
 }
 </script>
 
@@ -22,7 +46,7 @@ export default {
         <a class="logo-marque" href="#">Money Value</a>
     </div>
     <div class="btn-logout-container">
-    <button id="btn-logout" class="btn-logout"><i class="fa-solid fa-right-from-bracket mx-2"></i>Se déconnecter</button>
+    <button id="btn-logout" class="btn-logout" @click="logout"><i class="fa-solid fa-right-from-bracket mx-2"></i>Se déconnecter</button>
   </div>
   </div>
   
@@ -39,7 +63,10 @@ export default {
         </div>
     </div>
 
-  <List/>
+  <div class="container-fluid">
+      <PairList></PairList>
+  </div>
+  
 </template>
 
 <style src="">
@@ -50,7 +77,7 @@ body{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    background: var(--primary-color);
+    background: #F6F1E9;
     height: 100vh;
 }
 
