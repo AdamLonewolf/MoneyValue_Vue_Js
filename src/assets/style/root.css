@@ -1,0 +1,31 @@
+/*Police de mes pages*/
+
+@font-face {
+    font-family: 'N-regular';
+    src: url(/src/assets/fonts/NunitoSans-Regular.ttf);
+  }
+@font-face {
+    font-family: 'N-bold';
+    src: url(/src/assets/fonts/NunitoSans-Bold.ttf);
+  }
+@font-face {
+    font-family: 'N-semi';
+    src: url(/src/assets/fonts/NunitoSans-SemiBold.ttf);
+  }
+
+/*colorimétrie*/
+
+  :root{
+    --primary-color: #FFF;
+    --secondary-color:#47B5FF;
+    --tertiairy-color:#4481eb;
+    --border-black:#222831;
+    --text-black:#222831;
+    --link-text:#205295;
+    --text-white:#FFF;
+    --danger-color: #E76161;
+    --success-color:#59CE8F;
+    --regular: "N-regular";
+    --semi:"N-semi";
+    --bold:"N-bold";
+  }
