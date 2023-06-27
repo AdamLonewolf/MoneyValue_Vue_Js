@@ -2,28 +2,69 @@
 export default {
   data() {
      return{
-        currencies: [],
-        fromCurrency:"", 
-        toCurrency:"",
-        quantity:0
+        pairs: [],
+        pairId:"", 
+        quantity:0,
+        amount:"",
+        result: ""
      }
   },
 
   methods:{
-        async getcurrencies(){
-            var link = `${this.url}currencies/list`;
-             this.currencies = await(await(fetch(link, {
+        async getPairs(){
+            var link = `${this.url}pairs/list`;
+             this.pairs = await(await(fetch(link, {
                 method:"get"
             }))).json(); //on récupère la liste des devises
         },
 
-        async convert(){
-            
+     //Méthode qui va retourner le symbole de la devise (je parle du code de la devise)
+    
+      getCurrencySymbol(pairId){
+        var pair = this.pairs.data.find((pair) => pair.id === pairId) //On recherche dans la liste des paires une paire qui a un id identique à celle selectionnée dans l'outil de conversion
+        
+        //si on la trouve, on retourne le le code de la monnaie cible
+        if(pair){
+          return pair.to_currency_code;
+        } else {
+          return ''; // Si la paire n'est pas trouvée, renvoie une chaîne vide
         }
+     },
 
+      //Méthode qui va afficher le résultat
+
+      updateResult(){
+        this.result = Math.round(this.amount) + " " + this.getCurrencySymbol(this.pairId)
+      } ,
+
+    //Méthode qui va permettre de faire la conversion 
+        async convert(){
+            var convertLink = `${this.url}convert/${this.pairId}` //On renseigne l'id de la paire selectionnée
+             var res = await(await(fetch(convertLink, {
+                method:"post",
+                headers:{
+                        'Content-Type' : "application/json"
+                    },
+                    body: JSON.stringify({
+                        //On renseigne les valeurs de chaque élément
+                        "quantity" : this.quantity
+                    })
+            }))).json()
+
+        //Si c'est bon, on retourne une alerte contenant le message de succès si non, on retourne le message d'erreur
+            if(res.status == "OK"){
+              alert(res.message); 
+              this.amount = res.data //On retourne le résultat dans amount
+            } else {
+              alert(res.message); 
+            }
+
+            this.updateResult(); //on appelle la fonction quand on finit la conversion
+        }
     },
+
     mounted:function(){
-    this.getcurrencies();
+    this.getPairs();
   }
 };
 
@@ -80,7 +121,7 @@ export default {
           <a class="call-to-action" href="#section">Testez dès à présent !</a>
         </div>
         <div class="img-banner">
-          <img src="src/assets/images/currency.png" alt="" />
+          <img src="src/assets/images/currency.png" alt="currency" />
         </div>
       </div>
     </div>
@@ -103,23 +144,16 @@ export default {
                 </div>
                 <div class="currencies d-flex">
                   <div class="group-form group-form-2">
-                    <label for="from_currency">De</label>
-                    <select class="form-select my-1" v-model="fromCurrency">
-                        <option v-for="currency in currencies.data" :key="currency.id" :value="currency.id">{{ currency.currency_code }}
+                    <label for="from_currency">Conversion de -> à </label>
+                    <select class="form-select my-1" v-model="pairId">
+                        <option v-for="pair in pairs.data" :key="pair.id" :value="pair.id">
+                          {{pair.from_currency_code }} => {{pair.to_currency_code}}
                         </option>
                     </select>
                   </div>
-
-                  <div class="group-form group-form-3 mx-3">
-                    <label for="from_currency">à</label>
-                    <select class="form-select my-1" v-model="toCurrency">
-                        <option v-for="currency in currencies.data" :key="currency.id" :value="currency.id">{{ currency.currency_code }}
-                        </option>
-                    </select>
-                 </div>
                 </div>
-                <p class="amount">Montant : </p>
-                <a class="convert">Convertir</a>
+                <p class="amount">Montant : {{result}} </p>
+                <a class="convert" @click="convert()">Convertir</a>
               </form>
             </div>
           </div>

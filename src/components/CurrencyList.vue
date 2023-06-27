@@ -53,7 +53,7 @@ export default {
         <router-link :to="`/currencyform/`" class="custom-link">
             <button class="add-btn">
                 <i class="fa-solid fa-plus mx-2"></i>
-                Ajouter une nouvelle paire
+                Ajouter une nouvelle devise
             </button>
         </router-link>
     </div>
